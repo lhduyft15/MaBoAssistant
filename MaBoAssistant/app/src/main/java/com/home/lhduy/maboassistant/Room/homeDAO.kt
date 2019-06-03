@@ -11,7 +11,7 @@ interface homeDAO {
     fun findById(id : Int) : Home
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    fun insert(obj: Home): Int
+    fun insert(obj: Home): Long
 
     @Delete
     fun delete(todo: Home)
