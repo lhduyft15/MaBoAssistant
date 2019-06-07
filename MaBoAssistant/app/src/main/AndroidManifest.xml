@@ -11,6 +11,8 @@
             android:roundIcon="@drawable/panda"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
+        <activity android:name=".DeviceActivity">
+        </activity>
         <activity android:name=".AddRoomActivity">
         </activity>
         <activity android:name=".PhoneActivity">

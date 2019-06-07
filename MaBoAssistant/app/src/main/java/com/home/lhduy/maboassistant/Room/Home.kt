@@ -11,9 +11,13 @@ data class Home (
     @PrimaryKey(autoGenerate = true)
     var id:Int? = null,
     var roomName: String,
-    var deviceName: String,
-    var countDevice: Int = 0
+    var device1Name: String,
+    var device2Name: String,
+    var countDevice: Int,
+    var roomImg : Int,
+    var device1Img : Int,
+    var device2Img : Int
 
 ) : Parcelable {
-    constructor() : this(null,"","",0)
+    constructor() : this(null,"","","",0,-1,-1,-1)
 }

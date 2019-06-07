@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#008577</color>
-    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#1565C0</color>
     <color name="colorAccent">#D81B60</color>
     <color name="textApp">#2196F3</color>
+<<<<<<< HEAD
     <color name="white">#ffffff</color>
     <color name="colorButton">#3d5f51</color>
     <color name="colorButtonActive">#1bea95</color>
+=======
+    <color name="background">#EEEEEE</color>
+>>>>>>> 44250f9c580b38ebeb581d953594aed56d985412
 </resources>

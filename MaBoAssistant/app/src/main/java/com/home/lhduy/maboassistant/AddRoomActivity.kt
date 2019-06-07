@@ -1,26 +1,71 @@
 package com.home.lhduy.maboassistant
 
+import android.app.Activity
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
+import com.home.lhduy.maboassistant.Room.AppDatabase
+import com.home.lhduy.maboassistant.Room.Home
 import kotlinx.android.synthetic.main.activity_add_room.*
 
 class AddRoomActivity : AppCompatActivity() {
 
-    val spinnerData = ArrayList<Pair<String, Int>>()
+    val spinnerData = ArrayList<Pair<String,Int>>()
     val spinnerDevice1 = ArrayList<Pair<String,Int>>()
     val spinnerDevice2 = ArrayList<Pair<String,Int>>()
+
+    lateinit var db: AppDatabase
+    var home = Home()
+    var roomImg = -1
+    var device1Img = -1
+    var device2Img = -1
+    var roomName = ""
+    var device1Name = ""
+    var device2Name = ""
+    var checkSelectedDevice1 = 0
+    var checkSelectedDevice2 = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_room)
 
+        db = AppDatabase.invoke(this)
+
         setupSpinnerRoom()
         setupSpinnerDevice1()
         setupSpinnerDevice2()
+        handleSubmitData()
+    }
+
+    private fun handleSubmitData(){
+        btnSubmit.setOnClickListener {
+
+            home.roomName = roomName
+            home.device1Name = device1Name
+            home.device2Name = device2Name
+
+            home.roomImg = roomImg
+            home.device1Img = device1Img
+            home.device2Img = device2Img
+
+            home.countDevice = checkSelectedDevice1 + checkSelectedDevice2
+            Log.e("qqqqq", home.countDevice.toString())
+            val homeDAO = db.homeDAO()
+            val id = homeDAO.insert(home)
+
+            home.id = id.toInt()
+
+            val intent = Intent()
+            intent.putExtra(HOME_DATA, home)
+            setResult(Activity.RESULT_OK,intent)
+            finish()
+        }
     }
 
     private fun setupSpinnerRoom(){
@@ -39,6 +84,8 @@ class AddRoomActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                roomName = spinnerData[position].first
+                roomImg = spinnerData[position].second
                 Glide.with(this@AddRoomActivity)
                     .load(spinnerData[position].second)
                     .into(ivRoomBackground)
@@ -62,6 +109,13 @@ class AddRoomActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                if(spinnerDevice1[position].first != "---Select Device---"){
+                    checkSelectedDevice1 = 1
+                }
+
+                device1Name = spinnerDevice1[position].first
+                device1Img = spinnerDevice1[position].second
                 Glide.with(this@AddRoomActivity)
                     .load(spinnerDevice1[position].second)
                     .into(ivDevice1)
@@ -85,6 +139,13 @@ class AddRoomActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+                if(spinnerDevice2[position].first != "---Select Device---"){
+                    checkSelectedDevice2 = 1
+                }
+
+                device2Name = spinnerDevice2[position].first
+                device2Img = spinnerDevice2[position].second
                 Glide.with(this@AddRoomActivity)
                     .load(spinnerDevice2[position].second)
                     .into(ivDevice2)
@@ -92,4 +153,6 @@ class AddRoomActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
