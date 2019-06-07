@@ -9,11 +9,7 @@
         android:background="@color/background"
         tools:context=".HomeActivity">
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="match_parent"
-                  android:orientation="vertical"
-                  tools:layout_editor_absoluteY="0dp"
-                  tools:layout_editor_absoluteX="0dp">
+
         <android.support.v7.widget.RecyclerView
                 android:id="@+id/rvRooms"
                 android:layout_width="match_parent"
@@ -21,15 +17,14 @@
                 android:padding="10dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_height="wrap_content"/>
-    </LinearLayout>
 
     <LinearLayout
             android:id="@+id/ll_empty_view"
             android:layout_width="250dp"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="visible"
+            android:orientation="vertical">
 
         <TextView
                 android:layout_width="match_parent"
@@ -39,6 +34,7 @@
                 android:text="No room"
                 android:textColor="#FF000000"
                 android:textSize="15sp"
+                android:id="@+id/Noroom"
                 android:textStyle="bold"/>
 
         <TextView

@@ -28,9 +28,6 @@ class HomeAdapter(var items : ArrayList<Home>, val context : Context): RecyclerV
         homeViewHolder.tvRoomNameItem.text = "${items[position].roomName}"
         homeViewHolder.tvCountDeviceItem.text = "${items[position].countDevice}"
 
-        if(items[position].roomName != ""){
-            //homeViewHolder.ll_empty_view.visibility = View.GONE
-        }
 
         Log.e("RRRR","aaaaaa")
         Glide.with(context)
@@ -41,8 +38,9 @@ class HomeAdapter(var items : ArrayList<Home>, val context : Context): RecyclerV
             mListener.onItemClicked(position)
         }
 
-        homeViewHolder.itemView.setOnClickListener {
+        homeViewHolder.itemView.setOnLongClickListener {
             mListener.onItemLongClicked(position)
+            true
         }
 
     }
@@ -65,6 +63,5 @@ class HomeViewHolder(view : View) : RecyclerView.ViewHolder(view){
     var ivRoomImgItem = view.ivRoomImgItem
     var tvRoomNameItem = view.tvRoomNameItem
     var tvCountDeviceItem = view.tvCountDeviceItem
-    var ll_empty_view = view.ll_empty_view
 
 }

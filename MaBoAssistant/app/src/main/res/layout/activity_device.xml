@@ -6,18 +6,105 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
-        android:gravity="center_horizontal"
+        android:padding="15dp"
+        android:background="@color/background"
+        android:gravity= "center_horizontal"
         tools:context=".DeviceActivity">
 
-    <ImageView
-            android:id="@+id/ivRoomBackgroundDevice"
-            android:layout_width="370dp"
-            android:layout_height="200dp"/>
+    <ImageView android:layout_width="355dp"
+               android:id="@+id/ivRoom"
+               android:layout_height="200dp"/>
 
-    <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvDevices"
-            android:layout_width="370dp"
-            android:visibility="visible"
-            android:layout_height="wrap_content"/>
+    <LinearLayout android:layout_width="355dp"
+                  android:orientation="horizontal"
+                  android:layout_marginTop="20dp"
+                  android:padding="5dp"
+                  android:background="@color/backgroundDeviceItem"
+                  android:id="@+id/ll_device1"
+                  android:visibility="visible"
+                  android:layout_height="100dp">
+
+        <ImageView android:layout_width="120dp"
+                   android:id="@+id/ivDeviceImgItem1"
+                   android:layout_marginTop="5dp"
+                   android:src="@drawable/lamp_disabled"
+                   android:layout_height="70dp"/>
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content">
+
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/tvDeviceName1"
+                      android:text="Device 1"
+                      android:textSize="16sp"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginLeft="15dp"
+                      android:textColor="@color/textApp"
+                      android:layout_height="wrap_content"/>
+
+            <ImageView android:layout_width="60dp"
+                       android:id="@+id/ivToggle1"
+                       android:layout_marginTop="5dp"
+                       android:layout_marginLeft="10dp"
+                       android:src="@drawable/toggle_off"
+                       android:layout_height="40dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/btnSettingDevice1"
+                android:layout_width="25dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/settings"
+                android:layout_height="25dp"/>
+    </LinearLayout>
+
+    <LinearLayout android:layout_width="355dp"
+                  android:id="@+id/ll_device2"
+                  android:padding="5dp"
+                  android:background="@color/backgroundDeviceItem"
+                  android:layout_marginTop="10dp"
+                  android:visibility="visible"
+                  android:orientation="horizontal"
+                  android:layout_height="100dp">
+
+        <ImageView android:layout_width="120dp"
+                   android:id="@+id/ivDeviceImgItem2"
+                   android:layout_marginTop="5dp"
+                   android:src="@drawable/lamp_disabled"
+                   android:layout_height="70dp"/>
+
+        <LinearLayout android:layout_width="wrap_content"
+                      android:orientation="vertical"
+                      android:layout_height="wrap_content">
+
+            <TextView android:layout_width="wrap_content"
+                      android:id="@+id/tvDeviceName2"
+                      android:text="Device 2"
+                      android:textSize="16sp"
+                      android:layout_marginTop="10dp"
+                      android:layout_marginLeft="15dp"
+                      android:textColor="@color/textApp"
+                      android:layout_height="wrap_content"/>
+
+            <ImageView android:layout_width="60dp"
+                       android:id="@+id/ivToggle2"
+                       android:layout_marginTop="5dp"
+                       android:layout_marginLeft="10dp"
+                       android:src="@drawable/toggle_off"
+                       android:layout_height="40dp"/>
+
+        </LinearLayout>
+
+        <ImageView
+                android:id="@+id/btnSettingDevice2"
+                android:layout_width="25dp"
+                android:layout_marginLeft="70dp"
+                android:layout_marginTop="32dp"
+                android:src="@drawable/settings"
+                android:layout_height="25dp"/>
+    </LinearLayout>
 
 </LinearLayout>

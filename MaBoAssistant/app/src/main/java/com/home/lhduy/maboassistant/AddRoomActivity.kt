@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -47,24 +48,57 @@ class AddRoomActivity : AppCompatActivity() {
         btnSubmit.setOnClickListener {
 
             home.roomName = roomName
-            home.device1Name = device1Name
-            home.device2Name = device2Name
-
-            home.roomImg = roomImg
-            home.device1Img = device1Img
-            home.device2Img = device2Img
-
             home.countDevice = checkSelectedDevice1 + checkSelectedDevice2
-            Log.e("qqqqq", home.countDevice.toString())
-            val homeDAO = db.homeDAO()
-            val id = homeDAO.insert(home)
 
-            home.id = id.toInt()
 
-            val intent = Intent()
-            intent.putExtra(HOME_DATA, home)
-            setResult(Activity.RESULT_OK,intent)
-            finish()
+            if(home.roomName == "--Select Room--"){
+
+                val builder = AlertDialog.Builder(this@AddRoomActivity)
+                builder.setTitle("Warn")
+                    .setMessage("Please select room !")
+                    .setNegativeButton(
+                        "Cancel"
+                    ) { dialog, _ -> dialog?.dismiss() }
+
+                val myDialog = builder.create();
+                myDialog.show()
+
+            }
+            else{
+                if(home.countDevice == 0){
+
+                    val builder = AlertDialog.Builder(this@AddRoomActivity)
+                    builder.setTitle("Warn")
+                        .setMessage("Please select device !")
+                        .setNegativeButton(
+                            "Cancel"
+                        ) { dialog, _ -> dialog?.dismiss() }
+
+                    val myDialog = builder.create();
+                    myDialog.show()
+                }
+                else{
+
+                    home.device1Name = device1Name
+                    home.device2Name = device2Name
+
+                    home.roomImg = roomImg
+                    home.device1Img = device1Img
+                    home.device2Img = device2Img
+
+
+                    Log.e("qqqqq", home.countDevice.toString())
+                    val homeDAO = db.homeDAO()
+                    val id = homeDAO.insert(home)
+
+                    home.id = id.toInt()
+
+                    val intent = Intent()
+                    intent.putExtra(HOME_DATA, home)
+                    setResult(Activity.RESULT_OK,intent)
+                    finish()
+                }
+            }
         }
     }
 

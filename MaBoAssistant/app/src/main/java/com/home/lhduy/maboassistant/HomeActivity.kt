@@ -8,6 +8,7 @@ import android.support.v7.app.AlertDialog
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
+import android.view.View
 import com.home.lhduy.maboassistant.Room.AppDatabase
 import com.home.lhduy.maboassistant.Room.Home
 import com.home.lhduy.maboassistant.Room.homeDAO
@@ -56,11 +57,15 @@ class HomeActivity : AppCompatActivity() {
     private val homeItemClickListener = object : HomeItemClickListener {
         override fun onItemClicked(position: Int) {
 
-//            val intent = Intent(this@MainActivity, ProfileActivity::class.java)
-//            intent.putExtra(STUDENT_NAME_KEY, students[position].name)
-//            intent.putExtra(STUDENT_AVATAR_KEY, students[position].avatarOfTeacher)
-//            intent.putExtra(STUDENT_CLUB_KEY, students[position].classz)
-//            startActivity(intent)
+               val intent = Intent(this@HomeActivity, DeviceActivity::class.java)
+
+                intent.putExtra("A", rooms[position].roomName)
+                intent.putExtra("B",rooms[position].roomImg)
+                intent.putExtra("C",rooms[position].device1Name)
+                intent.putExtra("D",rooms[position].device2Name)
+                intent.putExtra("E",rooms[position].device1Img)
+                intent.putExtra("F",rooms[position].device2Img)
+                startActivity(intent)
 
         }
 
@@ -87,7 +92,14 @@ class HomeActivity : AppCompatActivity() {
 
     private fun getRooms() {
         val roomAddeds = dao.getAll() // get Students from ROOM database
-        Log.e("RRRR", roomAddeds.toString())
+
+
+        if(roomAddeds.isNotEmpty()){
+            ll_empty_view.visibility = View.GONE
+        }
+        else{
+            ll_empty_view.visibility = View.VISIBLE
+        }
 
         this.rooms.addAll(roomAddeds) // add to student list
 
@@ -98,6 +110,8 @@ class HomeActivity : AppCompatActivity() {
         dao.delete(rooms[position]) // remove from Room database  //
 
         rooms.removeAt(position) // remove student list on RAM
+
+        checkHaveAddedRoom()
 
         homeAdapter.notifyItemRemoved(position) // notify data change
         Timer(false).schedule(500) {
@@ -115,10 +129,24 @@ class HomeActivity : AppCompatActivity() {
         if(requestCode == CODE_ADD_ROOM && resultCode == Activity.RESULT_OK){
             val newRoomAdded = data?.extras?.getParcelable(HOME_DATA) as Home
             handleOnNewRoomAdded(newRoomAdded)
+            ll_empty_view.visibility = View.GONE
         }
     }
 
     private fun handleOnNewRoomAdded(home : Home){
         homeAdapter.appendData(home)
+    }
+
+    private fun checkHaveAddedRoom(){
+        val roomAddeds = dao.getAll() // get Students from ROOM database
+
+
+        if(roomAddeds.isNotEmpty()){
+            ll_empty_view.visibility = View.GONE
+        }
+        else{
+            ll_empty_view.visibility = View.VISIBLE
+        }
+
     }
 }

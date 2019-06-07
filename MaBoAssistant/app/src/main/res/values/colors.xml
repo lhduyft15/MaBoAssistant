@@ -5,4 +5,5 @@
     <color name="colorAccent">#D81B60</color>
     <color name="textApp">#2196F3</color>
     <color name="background">#EEEEEE</color>
+    <color name="backgroundDeviceItem">#FAFAFA</color>
 </resources>
