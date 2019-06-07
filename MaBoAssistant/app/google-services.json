@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "4229439092",
+    "firebase_url": "https://mabo-cb026.firebaseio.com",
+    "project_id": "mabo-cb026",
+    "storage_bucket": "mabo-cb026.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:4229439092:android:d771df47844784d2",
+        "android_client_info": {
+          "package_name": "com.home.lhduy.maboassistant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "4229439092-bspl516i9o5hsm2491qc2a4ocrqp55l4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAlO2_QMmPCBM_wPn1hgwB7wJ5jwmraVIY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "4229439092-bspl516i9o5hsm2491qc2a4ocrqp55l4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

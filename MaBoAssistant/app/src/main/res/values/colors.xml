@@ -4,6 +4,9 @@
     <color name="colorPrimaryDark">#1565C0</color>
     <color name="colorAccent">#D81B60</color>
     <color name="textApp">#2196F3</color>
+    <color name="white">#ffffff</color>
+    <color name="colorButton">#3d5f51</color>
+    <color name="colorButtonActive">#1bea95</color>
     <color name="background">#EEEEEE</color>
     <color name="backgroundDeviceItem">#FAFAFA</color>
 </resources>
