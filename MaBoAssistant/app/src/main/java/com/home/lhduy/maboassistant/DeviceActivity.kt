@@ -1,15 +1,23 @@
 package com.home.lhduy.maboassistant
 
+import android.app.Dialog
+import android.app.ProgressDialog
+import android.bluetooth.BluetoothClass
+import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.google.firebase.database.*
+import com.home.lhduy.maboassistant.Room.AppDatabase
 import com.home.lhduy.maboassistant.Room.Home
+import com.home.lhduy.maboassistant.Room.homeDAO
 import kotlinx.android.synthetic.main.activity_device.*
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.device_adapter.*
+import kotlin.concurrent.thread
 
 
 class DeviceActivity : AppCompatActivity() {
@@ -28,16 +36,24 @@ class DeviceActivity : AppCompatActivity() {
     var sttGarageDevice1 = false
     var sttGarageDevice2 = false
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device)
+        val progressDialog = ProgressDialog(this)
         getData()
+        getDataForFireBase(roomName)
+        progressDialog.setMessage("Updating status device")
+        progressDialog.show()
+        Handler().postDelayed({progressDialog.dismiss()},1500)
 
         when(roomName){
             "Living" -> {
+
                 ivToggle1.setOnClickListener {
                     val livingDevice1 = database.getReference("living device 1")
                     if(sttLivingDevice1){
+
                         livingDevice1.setValue(0)
                         Glide.with(this)
                             .load(R.drawable.toggle_off)
@@ -272,7 +288,7 @@ class DeviceActivity : AppCompatActivity() {
 
     private fun getData(){
         val data = intent.extras
-        Log.e("EEEEE","eeee")
+
         roomName = data.getString("A")
         var roomImg = data.getInt("B")
          device1Name = data.getString("C")
@@ -405,4 +421,277 @@ class DeviceActivity : AppCompatActivity() {
         }
 
     }
+
+    private fun getDataForFireBase(room : String){
+
+        val livingDevice1 = database.getReference("living device 1")
+        val diningDevice1 = database.getReference("dining device 1")
+        val bedDevice1 = database.getReference("bed device 1")
+        val bathDevice1 = database.getReference("bath device 1")
+        val garageDevice1 = database.getReference("garage device 1")
+
+        val livingDevice2 = database.getReference("living device 2")
+        val diningDevice2 = database.getReference("dining device 2")
+        val bedDevice2 = database.getReference("bed device 2")
+        val bathDevice2 = database.getReference("bath device 2")
+        val garageDevice2 = database.getReference("garage device 2")
+
+
+//        ref.child("test").setValue(1).addOnCompleteListener {
+//            Toast.makeText(applicationContext,"Success", Toast.LENGTH_LONG).show()
+//        }
+//        ref.child("test1").setValue(1).addOnCompleteListener {
+//            Toast.makeText(applicationContext,"Success", Toast.LENGTH_LONG).show()
+//        }
+        when(room){
+            "Living" ->{
+                livingDevice1.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+
+                            sttLivingDevice1 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle1)
+                            changeImgToOnForDevice(1)
+                        }
+                        else{
+
+                            sttLivingDevice1 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle1)
+                            changeImgToOffForDevice(1)
+                        }
+                    }
+                })
+
+                livingDevice2.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+
+
+                            sttLivingDevice2 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle2)
+                            changeImgToOnForDevice(2)
+                        }
+                        else{
+
+                            sttLivingDevice2 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle2)
+                            changeImgToOffForDevice(2)
+                        }
+                    }
+                })
+            }
+            "Dining" ->{
+                diningDevice1.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+
+                            sttDiningDevice1 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle1)
+                            changeImgToOnForDevice(1)
+                        }
+                        else{
+
+                            sttDiningDevice1 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle1)
+                            changeImgToOffForDevice(1)
+                        }
+                    }
+                })
+
+                diningDevice2.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttDiningDevice2 = true
+                            println("dining 2 ${p0.value}")
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle2)
+                            changeImgToOnForDevice(2)
+                        }
+                        else{
+                            sttDiningDevice2 = false
+                            println("dining 2 ${p0.value}")
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle2)
+                            changeImgToOffForDevice(2)
+                        }
+                    }
+                })
+            }
+            "Bed" ->{
+                bedDevice1.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttBedDevice1 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle1)
+                            changeImgToOnForDevice(1)
+                        }
+                        else{
+                            sttBedDevice1 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle1)
+                            changeImgToOffForDevice(1)
+                        }
+                    }
+                })
+
+                bedDevice2.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttBedDevice2 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle2)
+                            changeImgToOnForDevice(2)
+                        }
+                        else{
+                            sttBedDevice2 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle2)
+                            changeImgToOffForDevice(2)
+                        }
+                    }
+                })
+            }
+
+            "Bath" ->{
+                bathDevice1.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttBathDevice1 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle1)
+                            changeImgToOnForDevice(1)
+                        }
+                        else{
+                            sttBathDevice1 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle1)
+                            changeImgToOffForDevice(1)
+                        }
+                    }
+                })
+
+                bathDevice2.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttBathDevice2 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle2)
+                            changeImgToOnForDevice(2)
+                        }
+                        else{
+                            sttBathDevice2 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle2)
+                            changeImgToOffForDevice(2)
+                        }
+                    }
+                })
+            }
+
+            else ->{
+                garageDevice1.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttGarageDevice1 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle1)
+                            changeImgToOnForDevice(1)
+                        }
+                        else{
+                            sttGarageDevice1 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle1)
+                            changeImgToOffForDevice(1)
+                        }
+                    }
+                })
+
+                garageDevice2.addValueEventListener(object : ValueEventListener{
+                    override fun onCancelled(p0: DatabaseError) {
+                    }
+
+                    override fun onDataChange(p0: DataSnapshot) {
+                        val data = p0.value!!.toString()
+                        if(data == "1"){
+                            sttGarageDevice2 = true
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_on)
+                                .into(ivToggle2)
+                            changeImgToOnForDevice(2)
+                        }
+                        else{
+                            sttGarageDevice2 = false
+                            Glide.with(this@DeviceActivity)
+                                .load(R.drawable.toggle_off)
+                                .into(ivToggle2)
+                            changeImgToOffForDevice(2)
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+
 }

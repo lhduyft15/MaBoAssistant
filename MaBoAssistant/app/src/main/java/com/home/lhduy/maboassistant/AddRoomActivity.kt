@@ -10,8 +10,10 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.bumptech.glide.Glide
+import com.google.firebase.database.FirebaseDatabase
 import com.home.lhduy.maboassistant.Room.AppDatabase
 import com.home.lhduy.maboassistant.Room.Home
+import com.home.lhduy.maboassistant.Room.homeDAO
 import kotlinx.android.synthetic.main.activity_add_room.*
 
 class AddRoomActivity : AppCompatActivity() {
@@ -19,8 +21,13 @@ class AddRoomActivity : AppCompatActivity() {
     val spinnerData = ArrayList<Pair<String,Int>>()
     val spinnerDevice1 = ArrayList<Pair<String,Int>>()
     val spinnerDevice2 = ArrayList<Pair<String,Int>>()
+    val database = FirebaseDatabase.getInstance()
 
     lateinit var db: AppDatabase
+    lateinit var dao : homeDAO
+    var rooms : ArrayList<Home> = ArrayList()
+    var resultCheckRoomExist = false
+
     var home = Home()
     var roomImg = -1
     var device1Img = -1
@@ -49,7 +56,7 @@ class AddRoomActivity : AppCompatActivity() {
 
             home.roomName = roomName
             home.countDevice = checkSelectedDevice1 + checkSelectedDevice2
-
+            addDeviceOnFirebase(roomName)
 
             if(home.roomName == "--Select Room--"){
 
@@ -65,11 +72,11 @@ class AddRoomActivity : AppCompatActivity() {
 
             }
             else{
-                if(home.countDevice == 0){
-
+                checkRoomAdded(home.roomName)
+                if(resultCheckRoomExist){
                     val builder = AlertDialog.Builder(this@AddRoomActivity)
                     builder.setTitle("Warn")
-                        .setMessage("Please select device !")
+                        .setMessage("Room existed!")
                         .setNegativeButton(
                             "Cancel"
                         ) { dialog, _ -> dialog?.dismiss() }
@@ -78,25 +85,38 @@ class AddRoomActivity : AppCompatActivity() {
                     myDialog.show()
                 }
                 else{
+                    if(home.countDevice == 0){
 
-                    home.device1Name = device1Name
-                    home.device2Name = device2Name
+                        val builder = AlertDialog.Builder(this@AddRoomActivity)
+                        builder.setTitle("Warn")
+                            .setMessage("Please select device !")
+                            .setNegativeButton(
+                                "Cancel"
+                            ) { dialog, _ -> dialog?.dismiss() }
 
-                    home.roomImg = roomImg
-                    home.device1Img = device1Img
-                    home.device2Img = device2Img
+                        val myDialog = builder.create();
+                        myDialog.show()
+                    }
+                    else{
+
+                        home.device1Name = device1Name
+                        home.device2Name = device2Name
+
+                        home.roomImg = roomImg
+                        home.device1Img = device1Img
+                        home.device2Img = device2Img
 
 
-                    Log.e("qqqqq", home.countDevice.toString())
-                    val homeDAO = db.homeDAO()
-                    val id = homeDAO.insert(home)
+                        val homeDAO = db.homeDAO()
+                        val id = homeDAO.insert(home)
 
-                    home.id = id.toInt()
+                        home.id = id.toInt()
 
-                    val intent = Intent()
-                    intent.putExtra(HOME_DATA, home)
-                    setResult(Activity.RESULT_OK,intent)
-                    finish()
+                        val intent = Intent()
+                        intent.putExtra(HOME_DATA, home)
+                        setResult(Activity.RESULT_OK,intent)
+                        finish()
+                    }
                 }
             }
         }
@@ -188,5 +208,60 @@ class AddRoomActivity : AppCompatActivity() {
         }
     }
 
+    private fun checkRoomAdded(roomNew : String){
+        db = AppDatabase.invoke(this) // get Room database instance
+        dao = db.homeDAO()
+        val roomAddeds = dao.getAll()
+        println("$roomNew duoc check")
+        rooms.addAll(roomAddeds)
+        resultCheckRoomExist = false
+        for(each in rooms){
+            println(" check ${each.roomName}")
+            if(each.roomName == roomNew){
+                resultCheckRoomExist = true
+            }
+        }
+        println("$resultCheckRoomExist ket qua")
+    }
 
+    private fun addDeviceOnFirebase(roomName : String){
+        val livingDevice1 = database.getReference("living device 1")
+        val diningDevice1 = database.getReference("dining device 1")
+        val bedDevice1 = database.getReference("bed device 1")
+        val bathDevice1 = database.getReference("bath device 1")
+        val garageDevice1 = database.getReference("garage device 1")
+
+        val livingDevice2 = database.getReference("living device 2")
+        val diningDevice2 = database.getReference("dining device 2")
+        val bedDevice2 = database.getReference("bed device 2")
+        val bathDevice2 = database.getReference("bath device 2")
+        val garageDevice2 = database.getReference("garage device 2")
+
+        when(roomName){
+            "Living" ->{
+                livingDevice1.setValue(0)
+                livingDevice2.setValue(0)
+
+            }
+            "Dining" ->{
+                diningDevice1.setValue(0)
+                diningDevice2.setValue(0)
+
+            }
+            "Bed" ->{
+                bedDevice1.setValue(0)
+                bedDevice2.setValue(0)
+            }
+
+            "Bath" ->{
+                bathDevice1.setValue(0)
+                bathDevice2.setValue(0)
+            }
+
+            else ->{
+                garageDevice1.setValue(0)
+                garageDevice2.setValue(0)
+            }
+        }
+    }
 }

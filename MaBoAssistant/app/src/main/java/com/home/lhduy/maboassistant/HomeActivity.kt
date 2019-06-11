@@ -9,9 +9,15 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.View
+import com.bumptech.glide.Glide
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.home.lhduy.maboassistant.Room.AppDatabase
 import com.home.lhduy.maboassistant.Room.Home
 import com.home.lhduy.maboassistant.Room.homeDAO
+import kotlinx.android.synthetic.main.activity_device.*
 import kotlinx.android.synthetic.main.activity_home.*
 import java.sql.Types.NULL
 import java.util.*
@@ -24,6 +30,7 @@ class HomeActivity : AppCompatActivity() {
     lateinit var homeAdapter : HomeAdapter
     lateinit var dao : homeDAO
     lateinit var db: AppDatabase
+    val database = FirebaseDatabase.getInstance()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -75,7 +82,9 @@ class HomeActivity : AppCompatActivity() {
             builder.setTitle("Confirmation")
                 .setMessage("Remove ${rooms[position].roomName} ?")
                 .setPositiveButton("OK") { _, _ ->
+                    removeDeviceOnFirebase(rooms[position].roomName)
                     removeItem(position)
+
                 }
                 .setNegativeButton(
                     "Cancel"
@@ -91,7 +100,7 @@ class HomeActivity : AppCompatActivity() {
     }
 
     private fun getRooms() {
-        val roomAddeds = dao.getAll() // get Students from ROOM database
+        val roomAddeds = dao.getAll()
 
 
         if(roomAddeds.isNotEmpty()){
@@ -101,7 +110,7 @@ class HomeActivity : AppCompatActivity() {
             ll_empty_view.visibility = View.VISIBLE
         }
 
-        this.rooms.addAll(roomAddeds) // add to student list
+        this.rooms.addAll(roomAddeds)
 
         homeAdapter.notifyDataSetChanged() // notify data changed
     }
@@ -109,7 +118,7 @@ class HomeActivity : AppCompatActivity() {
     private fun removeItem(position: Int) {
         dao.delete(rooms[position]) // remove from Room database  //
 
-        rooms.removeAt(position) // remove student list on RAM
+        rooms.removeAt(position)
 
         checkHaveAddedRoom()
 
@@ -148,5 +157,46 @@ class HomeActivity : AppCompatActivity() {
             ll_empty_view.visibility = View.VISIBLE
         }
 
+    }
+
+    private fun removeDeviceOnFirebase(roomName : String){
+        val livingDevice1 = database.getReference("living device 1")
+        val diningDevice1 = database.getReference("dining device 1")
+        val bedDevice1 = database.getReference("bed device 1")
+        val bathDevice1 = database.getReference("bath device 1")
+        val garageDevice1 = database.getReference("garage device 1")
+
+        val livingDevice2 = database.getReference("living device 2")
+        val diningDevice2 = database.getReference("dining device 2")
+        val bedDevice2 = database.getReference("bed device 2")
+        val bathDevice2 = database.getReference("bath device 2")
+        val garageDevice2 = database.getReference("garage device 2")
+
+        when(roomName){
+            "Living" ->{
+                livingDevice1.setValue(null)
+                livingDevice2.setValue(null)
+
+            }
+            "Dining" ->{
+                diningDevice1.setValue(null)
+                diningDevice2.setValue(null)
+
+            }
+            "Bed" ->{
+                bedDevice1.setValue(null)
+                bedDevice2.setValue(null)
+            }
+
+            "Bath" ->{
+                bathDevice1.setValue(null)
+                bathDevice2.setValue(null)
+            }
+
+            else ->{
+                garageDevice1.setValue(null)
+                garageDevice2.setValue(null)
+            }
+        }
     }
 }

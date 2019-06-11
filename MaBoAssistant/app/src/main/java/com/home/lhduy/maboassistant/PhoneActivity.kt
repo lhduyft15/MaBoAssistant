@@ -49,7 +49,7 @@ class PhoneActivity : AppCompatActivity() {
             REQUEST_CODE_SPEECH_INPUT -> {
                 if(resultCode == Activity.RESULT_OK && null != data){
                     val result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS)
-                    textTv.text = result[0]
+                    tvCommand.text = result[0]
                     val dataResult = result[0]
                     if(dataResult.equals("make a call")){
                         startActivity(Intent(Intent.ACTION_DIAL))
@@ -63,8 +63,11 @@ class PhoneActivity : AppCompatActivity() {
                         }
                         startActivity(youtubeIntent)
                     }
-                    else if (dataResult.equals("play music")){
-
+                    else if (dataResult.equals("Play music")){
+                        val mp3Intent: Intent = Uri.parse("https://www.zingmp3.vn").let {webpage ->
+                            Intent(Intent.ACTION_VIEW, webpage)
+                        }
+                        startActivity(mp3Intent)
                     }
                 }
             }
