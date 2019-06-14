@@ -17,6 +17,8 @@ import com.home.lhduy.maboassistant.Room.Home
 import com.home.lhduy.maboassistant.Room.homeDAO
 import kotlinx.android.synthetic.main.activity_device.*
 import kotlinx.android.synthetic.main.device_adapter.*
+import java.util.*
+import kotlin.concurrent.schedule
 import kotlin.concurrent.thread
 
 
@@ -35,6 +37,7 @@ class DeviceActivity : AppCompatActivity() {
     var sttBathDevice2 = false
     var sttGarageDevice1 = false
     var sttGarageDevice2 = false
+    var check = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -42,10 +45,11 @@ class DeviceActivity : AppCompatActivity() {
         setContentView(R.layout.activity_device)
         val progressDialog = ProgressDialog(this)
         getData()
-        getDataForFireBase(roomName)
+        getDataFromFireBase(roomName)
         progressDialog.setMessage("Updating status device")
         progressDialog.show()
         Handler().postDelayed({progressDialog.dismiss()},1500)
+
 
         when(roomName){
             "Living" -> {
@@ -55,69 +59,156 @@ class DeviceActivity : AppCompatActivity() {
                     if(sttLivingDevice1){
 
                         livingDevice1.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle1)
-                        sttLivingDevice1 = false
 
-                        changeImgToOffForDevice(1)
+                        Timer().schedule(2000) {
+                            checkSendData("Living","0",1)
 
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle1)
+                                    sttLivingDevice1 = false
+
+                                    changeImgToOffForDevice(1)
+                                }else{
+                                    livingDevice1.setValue(1)
+                                }
+                            }
+                        }
                     }
                     else{
                         livingDevice1.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle1)
-                        sttLivingDevice1 = true
 
-                        changeImgToOnForDevice(1)
+                        Timer().schedule(2000) {
+                            checkSendData("Living","1",1)
 
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle1)
+                                    sttLivingDevice1 = true
+
+                                    changeImgToOnForDevice(1)
+                                }
+                                else{
+                                    livingDevice1.setValue(0)
+                                }
+                            }
+                        }
                     }
                 }
                 ivToggle2.setOnClickListener {
                     val livingDevice2 = database.getReference("living device 2")
                     if(sttLivingDevice2){
                         livingDevice2.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle2)
-                        sttLivingDevice2 = false
 
-                        changeImgToOffForDevice(2)
+                        Timer().schedule(2000) {
+                            checkSendData("Living","0",2)
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle2)
+                                    sttLivingDevice2 = false
+
+                                    changeImgToOffForDevice(2)
+                                }else{
+                                    livingDevice2.setValue(1)
+                                }
+                            }
+                        }
+
+
                     }
                     else{
                         livingDevice2.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle2)
-                        sttLivingDevice2 = true
 
-                        changeImgToOnForDevice(2)
+                        Timer().schedule(2000) {
+                            runOnUiThread {
+                                checkSendData("Living", "1", 2)
+                            }
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle2)
+                                    sttLivingDevice2 = true
+
+                                    changeImgToOnForDevice(2)
+                                }
+                                else{
+                                    livingDevice2.setValue(0)
+                                }
+                            }
+                        }
+
                     }
                 }
-
             }
             "Dining" -> {
                 ivToggle1.setOnClickListener {
                     val diningDevice1 = database.getReference("dining device 1")
                     if(sttDiningDevice1){
                        diningDevice1.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle1)
-                        sttDiningDevice1 = false
 
-                        changeImgToOffForDevice(1)
+                        Timer().schedule(2000) {
+                            checkSendData("Dining","0",1)
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle1)
+                                    sttDiningDevice1 = false
+
+                                    changeImgToOffForDevice(1)
+                                }else{
+                                    diningDevice1.setValue(1)
+                                }
+                            }
+                        }
 
                     }
                     else{
                         diningDevice1.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle1)
-                        sttDiningDevice1 = true
 
-                        changeImgToOnForDevice(1)
+                        Timer().schedule(2000) {
+
+                            checkSendData("Dining","1",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle1)
+                                    sttDiningDevice1 = true
+
+                                    changeImgToOnForDevice(1)
+                                }else{
+                                    diningDevice1.setValue(0)
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -125,21 +216,52 @@ class DeviceActivity : AppCompatActivity() {
                     val diningDevice2 = database.getReference("dining device 2")
                     if(sttDiningDevice2){
                         diningDevice2.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle2)
-                        sttDiningDevice2 = false
 
-                        changeImgToOffForDevice(2)
+                        Timer().schedule(2000) {
+
+                            checkSendData("Dining","0",2)
+
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle2)
+                                    sttDiningDevice2 = false
+
+                                    changeImgToOffForDevice(2)
+                                }else{
+                                    diningDevice2.setValue(1)
+                                }
+                            }
+                        }
+
                     }
                     else{
                         diningDevice2.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle2)
-                        sttDiningDevice2 = true
 
-                        changeImgToOnForDevice(2)
+                        Timer().schedule(2000) {
+
+                            checkSendData("Dining","1",2)
+
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle2)
+                                    sttDiningDevice2 = true
+
+                                    changeImgToOnForDevice(2)
+                                }else{
+                                    diningDevice2.setValue(0)
+                                }
+                            }
+                        }
                     }
                 }
 
@@ -149,44 +271,111 @@ class DeviceActivity : AppCompatActivity() {
                     val bedDevice1 = database.getReference("bed device 1")
                     if(sttBedDevice1){
                         bedDevice1.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle1)
-                        sttBedDevice1 = false
 
-                        changeImgToOffForDevice(1)
+                        Timer().schedule(2000) {
 
+                            checkSendData("Bed","0",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle1)
+                                    sttBedDevice1 = false
+
+                                    changeImgToOffForDevice(1)
+                                }else{
+                                    bedDevice1.setValue(1)
+                                }
+                            }
+                        }
                     }
                     else{
                         bedDevice1.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle1)
-                        sttBedDevice1 = true
 
-                        changeImgToOnForDevice(1)
 
+                        Timer().schedule(2000) {
+
+                            checkSendData("Bed","1",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle1)
+                                    sttBedDevice1 = true
+
+                                    changeImgToOnForDevice(1)
+                                }else{
+                                    bedDevice1.setValue(0)
+                                }
+                            }
+                        }
                     }
                 }
                 ivToggle2.setOnClickListener {
                     val bedDevice2 = database.getReference("bed device 2")
                     if(sttBedDevice2){
                        bedDevice2.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle2)
-                        sttBedDevice2 = false
 
-                        changeImgToOffForDevice(2)
+
+                        Timer().schedule(2000) {
+
+                            checkSendData("Bed","0",2)
+
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle2)
+                                    sttBedDevice2 = false
+
+                                    changeImgToOffForDevice(2)
+                                }else{
+                                    bedDevice2.setValue(1)
+                                }
+                            }
+                        }
+
                     }
                     else{
                        bedDevice2.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle2)
-                        sttBedDevice2 = true
 
-                        changeImgToOnForDevice(2)
+
+                        Timer().schedule(2000) {
+
+                            checkSendData("Bed","1",2)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle2)
+                                    sttBedDevice2 = true
+
+                                    changeImgToOnForDevice(2)
+                                }else{
+                                    bedDevice2.setValue(0)
+                                }
+                            }
+                        }
+
                     }
                 }
 
@@ -196,22 +385,57 @@ class DeviceActivity : AppCompatActivity() {
                     val bathDevice1 = database.getReference("bath device 1")
                     if(sttBathDevice1){
                         bathDevice1.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle1)
-                        sttBathDevice1 = false
 
-                        changeImgToOffForDevice(1)
+
+                        Timer().schedule(2000) {
+
+                            checkSendData("Bath","0",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle1)
+                                    sttBathDevice1 = false
+
+                                    changeImgToOffForDevice(1)
+                                }else{
+                                    bathDevice1.setValue(1)
+                                }
+                            }
+                        }
 
                     }
                     else{
                        bathDevice1.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle1)
-                        sttBathDevice1 = true
 
-                        changeImgToOnForDevice(1)
+                        Timer().schedule(2000) {
+
+                            checkSendData("Bath","1",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle1)
+                                    sttBathDevice1 = true
+
+                                    changeImgToOnForDevice(1)
+
+                                }else{
+                                    bathDevice1.setValue(0)
+                                }
+                            }
+                        }
+
 
                     }
                 }
@@ -219,21 +443,53 @@ class DeviceActivity : AppCompatActivity() {
                     val bathDevice2 = database.getReference("bath device 2")
                     if(sttBathDevice2){
                     bathDevice2.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle2)
-                        sttBathDevice2 = false
+                        Timer().schedule(2000) {
 
-                        changeImgToOffForDevice(2)
+                            checkSendData("Bath","0",2)
+
+                        }
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle2)
+                                    sttBathDevice2 = false
+
+                                    changeImgToOffForDevice(2)
+
+                                }else{
+                                    bathDevice2.setValue(1)
+                                }
+                            }
+                        }
+
                     }
                     else{
                         bathDevice2.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle2)
-                        sttBathDevice2 = true
+                        Timer().schedule(2000) {
 
-                        changeImgToOnForDevice(2)
+                            checkSendData("Bath","1",2)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle2)
+                                    sttBathDevice2 = true
+
+                                    changeImgToOnForDevice(2)
+                                }else{
+                                    bathDevice2.setValue(0)
+                                }
+                            }
+                        }
+
                     }
                 }
             }
@@ -242,22 +498,55 @@ class DeviceActivity : AppCompatActivity() {
                     val garageDevice1 = database.getReference("garage device 1")
                     if(sttGarageDevice1){
                        garageDevice1.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle1)
-                        sttGarageDevice1 = false
+                        Timer().schedule(2000) {
 
-                        changeImgToOffForDevice(1)
+                            checkSendData("Garage","0",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle1)
+                                    sttGarageDevice1 = false
+
+                                    changeImgToOffForDevice(1)
+                                }else{
+                                    garageDevice1.setValue(1)
+                                }
+                            }
+                        }
+
 
                     }
                     else{
                         garageDevice1.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle1)
-                        sttGarageDevice1 = true
+                        Timer().schedule(2000) {
 
-                        changeImgToOnForDevice(1)
+                            checkSendData("Garage","1",1)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle1)
+                                    sttGarageDevice1 = true
+
+                                    changeImgToOnForDevice(1)
+                                }else{
+                                    garageDevice1.setValue(0)
+                                }
+                            }
+                        }
 
                     }
                 }
@@ -265,21 +554,54 @@ class DeviceActivity : AppCompatActivity() {
                     val garageDevice2 = database.getReference("garage device 2")
                     if(sttGarageDevice2){
                        garageDevice2.setValue(0)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_off)
-                            .into(ivToggle2)
-                        sttGarageDevice2 = false
+                        Timer().schedule(2000) {
 
-                        changeImgToOffForDevice(2)
+                            checkSendData("Garage","0",2)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_off)
+                                        .into(ivToggle2)
+                                    sttGarageDevice2 = false
+
+                                    changeImgToOffForDevice(2)
+                                }else{
+                                    garageDevice2.setValue(1)
+                                }
+                            }
+                        }
+
                     }
                     else{
                        garageDevice2.setValue(1)
-                        Glide.with(this)
-                            .load(R.drawable.toggle_on)
-                            .into(ivToggle2)
-                        sttGarageDevice2 = true
+                        Timer().schedule(2000) {
 
-                        changeImgToOnForDevice(2)
+                            checkSendData("Garage","1",2)
+
+                        }
+
+                        Timer().schedule(2500) {
+                            runOnUiThread {
+
+                                if (check) {
+
+                                    Glide.with(getApplicationContext())
+                                        .load(R.drawable.toggle_on)
+                                        .into(ivToggle2)
+                                    sttGarageDevice2 = true
+
+                                    changeImgToOnForDevice(2)
+                                }else{
+                                    garageDevice2.setValue(0)
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -321,22 +643,22 @@ class DeviceActivity : AppCompatActivity() {
         if( index == 1){
             when(device1Name){
                 "Led" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.lamp_on)
                         .into(ivDeviceImgItem1)
                 }
                 "Fan" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.fan_on)
                         .into(ivDeviceImgItem1)
                 }
                 "TV" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.tv_on)
                         .into(ivDeviceImgItem1)
                 }
                 else ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.socket_on)
                         .into(ivDeviceImgItem1)
                 }
@@ -345,22 +667,22 @@ class DeviceActivity : AppCompatActivity() {
         else{
             when(device2Name){
                 "Led" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.lamp_on)
                         .into(ivDeviceImgItem2)
                 }
                 "Fan" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.fan_on)
                         .into(ivDeviceImgItem2)
                 }
                 "TV" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.tv_on)
                         .into(ivDeviceImgItem2)
                 }
                 else ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.socket_on)
                         .into(ivDeviceImgItem2)
                 }
@@ -374,22 +696,22 @@ class DeviceActivity : AppCompatActivity() {
         if(index == 1){
             when(device1Name){
                 "Led" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.lamp_disabled)
                         .into(ivDeviceImgItem1)
                 }
                 "Fan" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.fan_off)
                         .into(ivDeviceImgItem1)
                 }
                 "TV" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.tv_off)
                         .into(ivDeviceImgItem1)
                 }
                 else ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.socket_off)
                         .into(ivDeviceImgItem1)
                 }
@@ -398,22 +720,22 @@ class DeviceActivity : AppCompatActivity() {
         else{
             when(device2Name){
                 "Led" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.lamp_disabled)
                         .into(ivDeviceImgItem2)
                 }
                 "Fan" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.fan_off)
                         .into(ivDeviceImgItem2)
                 }
                 "TV" ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.tv_off)
                         .into(ivDeviceImgItem2)
                 }
                 else ->{
-                    Glide.with(this)
+                    Glide.with(getApplicationContext())
                         .load(R.drawable.socket_off)
                         .into(ivDeviceImgItem2)
                 }
@@ -422,7 +744,7 @@ class DeviceActivity : AppCompatActivity() {
 
     }
 
-    private fun getDataForFireBase(room : String){
+    private fun getDataFromFireBase(room : String){
 
         val livingDevice1 = database.getReference("living device 1")
         val diningDevice1 = database.getReference("dining device 1")
@@ -454,7 +776,7 @@ class DeviceActivity : AppCompatActivity() {
                         if(data == "1"){
 
                             sttLivingDevice1 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle1)
                             changeImgToOnForDevice(1)
@@ -462,7 +784,7 @@ class DeviceActivity : AppCompatActivity() {
                         else{
 
                             sttLivingDevice1 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle1)
                             changeImgToOffForDevice(1)
@@ -480,7 +802,7 @@ class DeviceActivity : AppCompatActivity() {
 
 
                             sttLivingDevice2 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle2)
                             changeImgToOnForDevice(2)
@@ -488,7 +810,7 @@ class DeviceActivity : AppCompatActivity() {
                         else{
 
                             sttLivingDevice2 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle2)
                             changeImgToOffForDevice(2)
@@ -506,7 +828,7 @@ class DeviceActivity : AppCompatActivity() {
                         if(data == "1"){
 
                             sttDiningDevice1 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle1)
                             changeImgToOnForDevice(1)
@@ -514,7 +836,7 @@ class DeviceActivity : AppCompatActivity() {
                         else{
 
                             sttDiningDevice1 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle1)
                             changeImgToOffForDevice(1)
@@ -531,7 +853,7 @@ class DeviceActivity : AppCompatActivity() {
                         if(data == "1"){
                             sttDiningDevice2 = true
                             println("dining 2 ${p0.value}")
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle2)
                             changeImgToOnForDevice(2)
@@ -539,7 +861,7 @@ class DeviceActivity : AppCompatActivity() {
                         else{
                             sttDiningDevice2 = false
                             println("dining 2 ${p0.value}")
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle2)
                             changeImgToOffForDevice(2)
@@ -556,14 +878,14 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttBedDevice1 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle1)
                             changeImgToOnForDevice(1)
                         }
                         else{
                             sttBedDevice1 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle1)
                             changeImgToOffForDevice(1)
@@ -579,14 +901,14 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttBedDevice2 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle2)
                             changeImgToOnForDevice(2)
                         }
                         else{
                             sttBedDevice2 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle2)
                             changeImgToOffForDevice(2)
@@ -594,7 +916,6 @@ class DeviceActivity : AppCompatActivity() {
                     }
                 })
             }
-
             "Bath" ->{
                 bathDevice1.addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
@@ -604,14 +925,14 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttBathDevice1 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle1)
                             changeImgToOnForDevice(1)
                         }
                         else{
                             sttBathDevice1 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle1)
                             changeImgToOffForDevice(1)
@@ -627,14 +948,14 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttBathDevice2 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle2)
                             changeImgToOnForDevice(2)
                         }
                         else{
                             sttBathDevice2 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle2)
                             changeImgToOffForDevice(2)
@@ -642,7 +963,6 @@ class DeviceActivity : AppCompatActivity() {
                     }
                 })
             }
-
             else ->{
                 garageDevice1.addValueEventListener(object : ValueEventListener{
                     override fun onCancelled(p0: DatabaseError) {
@@ -652,14 +972,14 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttGarageDevice1 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle1)
                             changeImgToOnForDevice(1)
                         }
                         else{
                             sttGarageDevice1 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle1)
                             changeImgToOffForDevice(1)
@@ -675,20 +995,247 @@ class DeviceActivity : AppCompatActivity() {
                         val data = p0.value!!.toString()
                         if(data == "1"){
                             sttGarageDevice2 = true
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_on)
                                 .into(ivToggle2)
                             changeImgToOnForDevice(2)
                         }
                         else{
                             sttGarageDevice2 = false
-                            Glide.with(this@DeviceActivity)
+                            Glide.with(getApplicationContext())
                                 .load(R.drawable.toggle_off)
                                 .into(ivToggle2)
                             changeImgToOffForDevice(2)
                         }
                     }
                 })
+            }
+        }
+    }
+
+    private fun checkSendData(room : String, status : String, index: Int){
+        val sttlivingDevice1 = database.getReference("living device 1_status")
+        val sttdiningDevice1 = database.getReference("dining device 1_status")
+        val sttbedDevice1 = database.getReference("bed device 1_status")
+        val sttbathDevice1 = database.getReference("bath device 1_status")
+        val sttgarageDevice1 = database.getReference("garage device 1_status")
+
+        val sttlivingDevice2 = database.getReference("living device 2_status")
+        val sttdiningDevice2 = database.getReference("dining device 2_status")
+        val sttbedDevice2 = database.getReference("bed device 2_status")
+        val sttbathDevice2 = database.getReference("bath device 2_status")
+        val sttgarageDevice2 = database.getReference("garage device 2_status")
+
+        val duration = Toast.LENGTH_SHORT
+
+        if(index == 1){
+            when(room){
+                "Living" ->{
+                    sttlivingDevice1.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Dining" ->{
+                    sttdiningDevice1.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            Log.e("DINING", "D1 data :$data vs status:$status")
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Bed" ->{
+                    sttbedDevice1.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Bath" ->{
+                    sttbathDevice1.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                else ->{
+                    sttgarageDevice1.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+            }
+        }
+        else{
+            when(room){
+                "Living" ->{
+                    sttlivingDevice2.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Dining" ->{
+                    sttdiningDevice2.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            Log.e("DINING", "D1 data :$data vs status:$status")
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Bed" ->{
+                    sttbedDevice2.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                "Bath" ->{
+                    sttbathDevice2.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
+                else ->{
+                    sttgarageDevice2.addListenerForSingleValueEvent(object : ValueEventListener{
+                        override fun onCancelled(p0: DatabaseError) {
+                        }
+
+                        override fun onDataChange(p0: DataSnapshot) {
+                            val data = p0.value!!.toString()
+                            if(data == status){
+                                val toast = Toast.makeText(applicationContext, "Success", duration)
+                                toast.show()
+                                check = true
+                            }
+                            else{
+                                val toast = Toast.makeText(applicationContext, "Error", duration)
+                                toast.show()
+                                check = false
+                            }
+                        }
+                    })
+                }
             }
         }
     }

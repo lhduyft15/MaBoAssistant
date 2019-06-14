@@ -2,14 +2,10 @@ package com.home.lhduy.maboassistant
 
 import android.app.Activity
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
-import android.provider.Settings
 import android.speech.RecognizerIntent
-import android.support.v4.content.ContextCompat
 import android.widget.Toast
 import kotlinx.android.synthetic.main.activity_phone.*
 import java.lang.Exception
@@ -24,7 +20,6 @@ class PhoneActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_phone)
 
-        checkPermission()
         voiceBtn.setOnClickListener{
             speak()
         }
@@ -74,14 +69,4 @@ class PhoneActivity : AppCompatActivity() {
         }
     }
 
-    private fun checkPermission(){
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            if(!(ContextCompat.checkSelfPermission(this, android.Manifest.permission.RECORD_AUDIO) == PackageManager.PERMISSION_GRANTED)){
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS,
-                    Uri.parse("package:" + packageName))
-                startActivity(intent)
-                finish()
-            }
-        }
-    }
 }

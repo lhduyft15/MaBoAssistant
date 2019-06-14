@@ -22,7 +22,7 @@
                 app:srcCompat="@drawable/chatmabo"
                 android:id="@+id/imageView5"/>
         <TextView
-                android:text="Please press mic"
+                android:text="Please press the"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView1"
@@ -30,11 +30,11 @@
                 android:layout_marginTop="30dp"
                 android:layout_alignLeft="@+id/imageView5"
                 android:layout_alignRight="@+id/imageView5"
-                android:textSize="15sp"
+                android:textSize="14sp"
         />
 
         <TextView
-                android:text="to call with me"
+                android:text="mic to talk with me"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/textView2"
@@ -42,7 +42,7 @@
                 android:layout_marginTop="50dp"
                 android:layout_alignLeft="@+id/imageView5"
                 android:layout_alignRight="@+id/imageView5"
-                android:textSize="15sp"
+                android:textSize="14sp"
         />
 
 
@@ -68,7 +68,7 @@
                 app:srcCompat="@drawable/chatuser"
                 />
         <TextView
-                android:text="Please press mic"
+                android:text="Your voice"
                 android:id="@+id/tvCommand"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -76,7 +76,7 @@
                 android:layout_marginTop="40dp"
                 android:layout_alignLeft="@+id/ivChatUser"
                 android:layout_alignRight="@+id/ivChatUser"
-                android:textSize="15sp"
+                android:textSize="14sp"
         />
 
         <ImageView
